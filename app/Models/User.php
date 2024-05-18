@@ -2,14 +2,26 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Facades\Filament;
+use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
+use Filament\Models\Contracts\HasTenants;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenants
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +32,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
     ];
 
     /**
@@ -33,15 +46,75 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    public function getTenants(Panel $panel): Collection
+    {
+        return $this->tenants;
+    }
+
+    public function tenants(): BelongsToMany
+    {
+        return $this->belongsToMany(Tenant::class);
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->tenants->contains($tenant);
+    }
+
+    public function tenant(): BelongsToMany
+    {
+        return $this->tenants()->where('tenant_id', Filament::getTenant()->getAttribute('id'));
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return str_ends_with($this->email, '@example.com');
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return Storage::url($this->avatar);
+    }
+
+    public static function getForm(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            Section::make('Informações do usuário')
+                ->schema([
+                    Forms\Components\TextInput::make('name')
+                        ->label('Nome')
+                        ->rules(['required']),
+                    Forms\Components\TextInput::make('email')
+                        ->label('E-mail')
+                        ->rules(['required', 'email']),
+                    Forms\Components\TextInput::make('password')
+                        ->label('Senha')
+                        ->password()
+                        ->revealable()
+                        ->required(fn (string $operation): bool => $operation === 'create')
+                        ->dehydrated(fn (?string $state) => filled($state)),
+                    Forms\Components\TextInput::make('password_confirmation')
+                        ->label('Confirme a senha')
+                        ->password()
+                        ->revealable()
+                        ->required(fn (string $operation): bool => $operation === 'create')
+                        ->dehydrated(fn (?string $state) => filled($state)),
+                    FileUpload::make('avatar')
+                        ->label('Avatar')
+                        ->image()
+                        ->imageEditor()
+                        ->acceptedFileTypes(['image/*'])
+                        ->rules(['image', 'max:1024']),
+                ])->columns(),
         ];
     }
 }

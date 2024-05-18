@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+BRANCH_NAME=$(git symbolic-ref --short HEAD)
+COMMIT_MESSAGE=$(cat "$1")
+
+echo "$BRANCH_NAME: $COMMIT_MESSAGE" >$1

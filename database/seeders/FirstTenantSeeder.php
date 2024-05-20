@@ -11,8 +11,8 @@ class FirstTenantSeeder extends Seeder
     public function run(): void
     {
         Tenant::create([
-            'name' => 'WSoft',
-            'slug' => 'w-soft',
+            'name' => 'AgendaMe',
+            'slug' => 'agenda-me',
         ])->users()->attach(User::find(1));
     }
 }

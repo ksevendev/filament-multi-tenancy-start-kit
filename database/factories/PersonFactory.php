@@ -20,9 +20,9 @@ class PersonFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
-            'type' => $this->faker->randomElement(['P', 'L']),
-            'surname' => $this->faker->name(),
+            'name'       => $this->faker->name(),
+            'type'       => $this->faker->randomElement(['P', 'L']),
+            'surname'    => $this->faker->name(),
             'birth_date' => $this->faker->date(),
         ];
     }

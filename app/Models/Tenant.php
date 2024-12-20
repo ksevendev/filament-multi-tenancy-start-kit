@@ -2,24 +2,35 @@
 
 namespace App\Models;
 
+use App\Models\Business\{Business, Lead};
 use App\Observers\TenantObserver;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Split;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\ToggleButtons;
+use Filament\Forms\Components\{FileUpload, Grid, Section, TextInput, ToggleButtons};
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\{BelongsToMany, HasMany, MorphMany};
+use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 use Illuminate\Support\Facades\Storage;
-use Leandrocfe\FilamentPtbrFormFields\Document;
+use Laravel\Cashier\Billable;
+use Leandrocfe\FilamentPtbrFormFields\{Document};
 
 #[ObservedBy(TenantObserver::class)]
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property string|null $avatar
+ * @property string|null $document
+ * @property string|null $website
+ * @property string $type
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ */
 class Tenant extends Model
 {
+    use Billable;
+    use HasFactory;
+    use SoftDeletes;
+
     protected $guarded = ['id'];
 
     public function members(): BelongsToMany
@@ -50,6 +61,41 @@ class Tenant extends Model
     public function emails(): MorphMany
     {
         return $this->morphMany(Emails::class, 'emailable');
+    }
+
+    public function vehicles(): HasMany
+    {
+        return $this->hasMany(Vehicles::class);
+    }
+
+    public function owners(): HasMany
+    {
+        return $this->hasMany(Owners::class);
+    }
+
+    public function leads(): HasMany
+    {
+        return $this->hasMany(Lead::class);
+    }
+
+    public function businesses(): HasMany
+    {
+        return $this->hasMany(Business::class);
+    }
+
+    public function maintenances(): HasMany
+    {
+        return $this->hasMany(Maintenance::class);
+    }
+
+    public function calendar(): HasMany
+    {
+        return $this->hasMany(Calendar::class);
+    }
+
+    public function improvementRequests(): HasMany
+    {
+        return $this->hasMany(ImprovementRequests::class);
     }
 
     public function getFilamentAvatarUrl(): ?string

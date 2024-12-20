@@ -2,8 +2,7 @@
 
 namespace App\Filament\Pages\Auth;
 
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Section;
+use Filament\Forms\Components\{FileUpload, Section};
 use Filament\Forms\Form;
 use Filament\Pages\Auth\EditProfile as BaseEditProfile;
 

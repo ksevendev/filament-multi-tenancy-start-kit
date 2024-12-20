@@ -2,11 +2,20 @@
 
 namespace App\Models;
 
-use Filament\Forms\Components\Repeater;
+use Awcodes\TableRepeater\Components\TableRepeater;
+use Awcodes\TableRepeater\Header;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property string $emailable_type
+ * @property int $emailable_id
+ * @property string $address
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ */
 class Emails extends Model
 {
     use HasFactory;
@@ -33,22 +42,23 @@ class Emails extends Model
     public static function getForm(): array
     {
         return [
-            Repeater::make('emails')
-                ->label('E-mails')
-                ->relationship()
+            TableRepeater::make('emails')
+                ->relationship('emails')
+                ->label('')
+                ->headers([
+                    Header::make('email')
+                        ->label('E-mails'),
+                ])
                 ->schema([
                     TextInput::make('address')
                         ->label('E-mail')
-                        ->rules([
-                            'nullable',
-                            'email:rfc,dns',
-                        ]),
+                        ->nullable()
+                        ->email(),
                 ])
-                ->addActionLabel('Adicionar e-mail')
-                ->collapsible()
-                ->cloneable()
-                ->grid(2)
-                ->itemLabel(fn (array $state): ?string => $state['address']),
+                ->default([])
+                ->columnSpan('full')
+                ->emptyLabel('Nenhum e-mail cadastrado')
+                ->addActionLabel('Adicionar e-mail'),
         ];
     }
 }

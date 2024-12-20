@@ -2,14 +2,24 @@
 
 namespace App\Models;
 
-use Filament\Forms\Components\Repeater;
+use Awcodes\TableRepeater\Components\TableRepeater;
+use Awcodes\TableRepeater\Header;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 use Leandrocfe\FilamentPtbrFormFields\PhoneNumber;
 
+/**
+ * @property int $id
+ * @property string $phonable_type
+ * @property int $phonable_id
+ * @property string $number
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ */
 class Phones extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -33,19 +43,21 @@ class Phones extends Model
     public static function getForm(): array
     {
         return [
-            Repeater::make('phones')
-                ->label('Telefones')
-                ->relationship()
+            TableRepeater::make('phones')
+                ->relationship('phones')
+                ->label('')
+                ->headers([
+                    Header::make('phone')
+                        ->label('Telefones'),
+                ])
                 ->schema([
                     PhoneNumber::make('number')
                         ->label('Telefone')
-                        ->rules('required'),
+                        ->default(null),
                 ])
-                ->addActionLabel('Adicionar telefone')
-                ->collapsible()
-                ->cloneable()
-                ->grid(2)
-                ->itemLabel(fn (array $state): ?string => $state['number']),
+                ->default([])
+                ->columnSpan('full')
+                ->emptyLabel('Nenhum telefone cadastrado'),
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Filament\Clusters\Settings\Resources\UsersResource\Pages;
 
 use App\Filament\Clusters\Settings\Resources\UsersResource;
 use Filament\Actions;
+use Filament\Facades\Filament;
 use Filament\Resources\Pages\ListRecords;
 
 class ListUsers extends ListRecords
@@ -12,8 +13,13 @@ class ListUsers extends ListRecords
 
     protected function getHeaderActions(): array
     {
+        $tenant = Filament::getTenant();
+
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Novo usuário')
+                ->icon('heroicon-o-plus')
+                ->visible(fn () => count($tenant->members) <= 3),
         ];
     }
 }

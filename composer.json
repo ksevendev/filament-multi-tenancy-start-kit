@@ -7,18 +7,35 @@
     "require": {
         "php": "^8.2",
         "awcodes/filament-quick-create": "^3.3",
+        "awcodes/filament-table-repeater": "^3.0",
+        "dotswan/filament-laravel-pulse": "^1.1",
+        "eightynine/filament-excel-import": "^3.1",
         "filament/filament": "^3.2",
+        "laravel/cashier": "^15.5",
         "laravel/framework": "^11.0",
+        "laravel/pint": "^1.18",
+        "laravel/pulse": "^1.2",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "leandrocfe/filament-ptbr-form-fields": "^3.0"
+        "leandrocfe/filament-ptbr-form-fields": "^3.0",
+        "maartenpaauw/filament-cashier-billing-provider": "^2.0",
+        "marvinlabs/laravel-discord-logger": "^1.4",
+        "mokhosh/filament-kanban": "^2.8",
+        "novadaemon/filament-pretty-json": "^2.2",
+        "owen-it/laravel-auditing": "^13.6",
+        "pxlrbt/filament-excel": "^2.3",
+        "saade/filament-fullcalendar": "^3.0",
+        "shuvroroy/filament-spatie-laravel-backup": "^2.2",
+        "tapp/filament-auditing": "^3.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.13",
+        "barryvdh/laravel-ide-helper": "^3.1",
         "fakerphp/faker": "^1.23",
-        "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
-        "phpunit/phpunit": "^11.0.1",
+        "pestphp/pest": "^2.34",
         "spatie/laravel-ignition": "^2.4"
     },
     "autoload": {

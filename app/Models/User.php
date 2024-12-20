@@ -2,26 +2,37 @@
 
 namespace App\Models;
 
+use App\Enum\User\RoleEnum;
 use Filament\Facades\Filament;
-use Filament\Forms;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Section;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Models\Contracts\HasAvatar;
-use Filament\Models\Contracts\HasTenants;
-use Filament\Panel;
+use Filament\Forms\Components\{FileUpload, Section, ToggleButtons};
+use Filament\Models\Contracts\{FilamentUser, HasAvatar, HasTenants};
+use Filament\{Forms, Panel};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Leandrocfe\FilamentPtbrFormFields\PhoneNumber;
+use OwenIt\Auditing\Contracts\{Auditable};
 
-class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenants
+/**
+ * @property int $id
+ * @property string|null $avatar
+ * @property string $name
+ * @property string $email
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property mixed $password
+ * @property string $role
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ */
+class User extends Authenticatable implements Auditable, FilamentUser, HasAvatar, HasTenants
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, \OwenIt\Auditing\Auditable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -30,9 +41,11 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
      */
     protected $fillable = [
         'name',
+        'phone',
         'email',
         'password',
         'avatar',
+        'role',
     ];
 
     /**
@@ -52,7 +65,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'password'          => 'hashed',
+        'role'              => RoleEnum::class,
     ];
 
     public function getTenants(Panel $panel): Collection
@@ -77,12 +91,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return str_ends_with($this->email, '@example.com');
+        return true;
     }
 
     public function getFilamentAvatarUrl(): ?string
     {
-        return Storage::url($this->avatar);
+        return $this->avatar ? Storage::url($this->avatar) : null;
     }
 
     public static function getForm(): array
@@ -96,6 +110,20 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
                     Forms\Components\TextInput::make('email')
                         ->label('E-mail')
                         ->rules(['required', 'email']),
+                    PhoneNumber::make('phone')
+                        ->label('Telefone')
+                        ->default(null),
+                    ToggleButtons::make('role')
+                        ->label('Função')
+                        ->options([
+                            'admin' => 'Administrador',
+                            'user'  => 'Usuário',
+                        ])
+                        ->icons([
+                            'admin' => 'heroicon-o-shield-check',
+                            'user'  => 'heroicon-o-user',
+                        ])
+                        ->inline(),
                     Forms\Components\TextInput::make('password')
                         ->label('Senha')
                         ->password()
@@ -114,6 +142,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
                         ->imageEditor()
                         ->acceptedFileTypes(['image/*'])
                         ->rules(['image', 'max:1024']),
+
                 ])->columns(),
         ];
     }

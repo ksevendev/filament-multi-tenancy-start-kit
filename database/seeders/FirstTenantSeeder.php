@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Tenant;
-use App\Models\User;
+use App\Models\{Tenant, User};
 use Illuminate\Database\Seeder;
 
 class FirstTenantSeeder extends Seeder
@@ -11,8 +10,8 @@ class FirstTenantSeeder extends Seeder
     public function run(): void
     {
         Tenant::create([
-            'name' => 'AgendaMe',
-            'slug' => 'agenda-me',
+            'name' => 'WSoft',
+            'slug' => 'w-soft',
         ])->users()->attach(User::find(1));
     }
 }

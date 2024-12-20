@@ -8,16 +8,16 @@ use Filament\Actions\RestoreAction;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Actions\{Action, ActionGroup, DeleteAction, EditAction, ViewAction};
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
 
 class PersonResource extends Resource
 {
+    protected static ?int $navigationSort = 1;
+
     protected static ?string $model = Person::class;
 
     protected static ?string $label = 'Clientes';
@@ -35,25 +35,50 @@ class PersonResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label('Nome')
                     ->description(fn ($record) => $record->document)
+                    ->searchable()
                     ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('surname')
+                    ->toggleable(),
+                TextColumn::make('surname')
                     ->label('Apelido')
                     ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('birth_date')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('birth_date')
                     ->label('Data de nascimento')
                     ->date()
                     ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('nationality')
+                    ->label('Nacionalidade')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('naturalness')
+                    ->label('Naturalidade')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('profession')
+                    ->label('Profissão')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('created_at')
                     ->label('Criado em')
                     ->dateTime()
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('updated_at')
+                    ->label('Atualizado em')
+                    ->dateTime()
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -68,11 +93,11 @@ class PersonResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    ExportBulkAction::make()->label('Exportar para Excel'),
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-//                ExportBulkAction::make(),
             ])
             ->emptyStateIcon('heroicon-o-users')
             ->emptyStateHeading('Nenhuma pessoa encontrada')
@@ -88,9 +113,16 @@ class PersonResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPeople::route('/'),
+            'index'  => Pages\ListPeople::route('/'),
             'create' => Pages\CreatePerson::route('/create'),
-            'edit' => Pages\EditPerson::route('/{record}/edit'),
+            'edit'   => Pages\EditPerson::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            AuditsRelationManager::class,
         ];
     }
 }

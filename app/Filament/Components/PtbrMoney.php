@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
-namespace App\Filament\Forms\Components;
+namespace App\Filament\Components;
 
 use Closure;
 use Filament\Forms\Components\TextInput;

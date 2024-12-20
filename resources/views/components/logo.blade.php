@@ -1,3 +1,3 @@
 <div class="text-xl">
-    <span class="text-primary-500 font-medium">System</span> Digital
+    <span class="text-primary-500 font-medium">WSOFT</span> Digital
 </div>

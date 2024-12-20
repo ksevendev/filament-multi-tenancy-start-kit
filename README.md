@@ -9,17 +9,11 @@
 Este projeto foi desenvolvido para facilitar o inicio de um projeto multi-tenant com Laravel, e Filament.
 
 
-## Login
-![img_3.png](img_3.png)
+## Sistema de Multi-Tenancy
 
-## Configurações da empresa
-![img.png](img.png)
-
-## Gerenciamento de equipe
-![img_1.png](img_1.png)
-
-## Gerenciamento de clientes
-![img_2.png](img_2.png)
+<video width="320" height="240" controls>
+  <source src="video.webm" type="video/webm">
+</video>
 
 
 ## Instalação

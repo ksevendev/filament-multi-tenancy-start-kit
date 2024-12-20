@@ -1,4 +1,3 @@
-
 <?php
 
 namespace Database\Seeders;
@@ -12,9 +11,9 @@ class FirstUserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'Felipe Arnold',
-            'email' => 'felipe@example.com',
-            'password' => Hash::make('password')
+            'name'     => 'Felipe Arnold',
+            'email'    => 'felipe@example.com',
+            'password' => Hash::make('password'),
         ]);
     }
 }

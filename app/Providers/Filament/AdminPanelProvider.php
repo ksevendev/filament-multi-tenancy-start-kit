@@ -81,8 +81,8 @@ class AdminPanelProvider extends PanelProvider
                         IntegrationsResource::class,
                         OriginsResource::class,
                     ]),
-                //                FilamentSpatieLaravelBackupPlugin::make()
-                //                    ->usingQueue('default'),
+                    FilamentSpatieLaravelBackupPlugin::make()
+                        ->usingQueue('default'),
                 FilamentFullCalendarPlugin::make()
                     ->selectable()
                     ->editable(),
@@ -106,14 +106,6 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-cog'),
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->favicon(asset('images/icon.webp'))
-            ->brandLogo(asset('images/logo-azul.webp'))
-            ->darkModeBrandLogo(
-                fn (): string => auth()->check()
-                ? asset('images/logo-branco.webp')
-                : asset('images/logo-azul.webp')
-            )
-            ->brandLogoHeight(fn (): string => auth()->check() ? '5rem' : '5rem')
             ->font('Inter')
             ->middleware([
                 EncryptCookies::class,

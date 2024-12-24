@@ -47,31 +47,37 @@ Este kit foi projetado para acelerar o desenvolvimento de projetos multi tenancy
 
 ## Instalação
 
-1. Composer
+#### Composer
 ```bash
 composer install
 ```
 
-2. Migrações
-```bash
-php artisan migrate
+#### NPM
+```bash 
+npm install
 ```
 
-3. Seeders
-```bash
-php artisan db:seed
-```
-
-4. ENV
+#### ENV
 ```bash
  cp .env.example .env
 ```
 
-5. Key
+#### Key
 ```bash
 php artisan key:generate
 ```
-6. Link Storage
+
+#### Link Storage
 ```bash
 php artisan storage:link
+```
+
+#### Migrações
+```bash
+php artisan migrate
+```
+
+#### Seeders
+```bash
+php artisan db:seed
 ```

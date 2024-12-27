@@ -2,23 +2,29 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Clusters\Settings\Resources\{FunnelsResource, IntegrationsResource, OriginsResource};
+use App\Filament\Clusters\Settings\Resources\FunnelsResource;
+use App\Filament\Clusters\Settings\Resources\IntegrationsResource;
+use App\Filament\Clusters\Settings\Resources\OriginsResource;
 use App\Filament\Pages\Dashboard;
 use App\Filament\Pages\Tenancy\EditTeamProfile;
-use App\Filament\Resources\VehiclesResource;
-use App\Filament\Widgets\Chart\{BusinessChart, SaleVehiclesChart};
 use App\Models\Tenant;
 use Awcodes\FilamentQuickCreate\QuickCreatePlugin;
 use Filament\Facades\Filament;
-use Filament\Http\Middleware\{Authenticate, DisableBladeIconComponents, DispatchServingFilamentEvent};
-use Filament\Navigation\{MenuItem, NavigationGroup};
+use Filament\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
+use Filament\Navigation\NavigationGroup;
+use Filament\Panel;
+use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\MaxWidth;
-use Filament\{Panel, PanelProvider};
-use Illuminate\Cookie\Middleware\{AddQueuedCookiesToResponse, EncryptCookies};
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
-use Illuminate\Session\Middleware\{AuthenticateSession, StartSession};
+use Illuminate\Session\Middleware\AuthenticateSession;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Str;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Maartenpaauw\Filament\Cashier\Stripe\BillingProvider;
@@ -56,20 +62,20 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-user'),
                 'teams' => MenuItem::make()->label('Equipe')
                     ->icon('heroicon-o-users')
-                    ->url(fn (): string => '/admin/' . Str::slug(Filament::getTenant()->name) . '/settings/users'),
+                    ->url(fn (): string => '/admin/'.Str::slug((Filament::getTenant()->name ?? 'teams')).'/settings/users'),
                 'settings' => MenuItem::make()->label('Configurações')
                     ->icon('heroicon-o-cog')
-                    ->url(fn (): string => '/admin/' . Str::slug(Filament::getTenant()->name) . '/settings'),
+                    ->url(fn (): string => '/admin/'.Str::slug((Filament::getTenant()->name ?? 'settings')).'/settings'),
                 'improvement-requests' => MenuItem::make()->label('Solicitações')
                     ->icon('heroicon-o-document-text')
-                    ->url(fn (): string => '/admin/' . Str::slug(Filament::getTenant()->name) . '/improvement-requests'),
+                    ->url(fn (): string => '/admin/'.Str::slug((Filament::getTenant()->name ?? 'improvement-requests')).'/improvement-requests'),
                 'logout' => MenuItem::make()->label('Sair'),
             ])
             ->spa()
             ->colors([
-                'danger'  => Color::Rose,
-                'gray'    => Color::Gray,
-                'info'    => Color::Blue,
+                'danger' => Color::Rose,
+                'gray' => Color::Gray,
+                'info' => Color::Blue,
                 'primary' => Color::Indigo,
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
@@ -81,8 +87,8 @@ class AdminPanelProvider extends PanelProvider
                         IntegrationsResource::class,
                         OriginsResource::class,
                     ]),
-                    FilamentSpatieLaravelBackupPlugin::make()
-                        ->usingQueue('default'),
+                FilamentSpatieLaravelBackupPlugin::make()
+                    ->usingQueue('default'),
                 FilamentFullCalendarPlugin::make()
                     ->selectable()
                     ->editable(),

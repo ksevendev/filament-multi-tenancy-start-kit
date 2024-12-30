@@ -101,3 +101,10 @@ felipe@example.com
 ```bash
 password
 ```
+
+
+## contribua com esse projeto com qualquer valor
+
+Se puder, ajude-nos com uma doação via PIX para manter o serviço ativo, qualquer valor é bem-vindo!
+
+Chave PIX: c2a36640-d3da-4fe6-9666-548333397453

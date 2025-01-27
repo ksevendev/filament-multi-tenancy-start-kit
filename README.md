@@ -107,4 +107,9 @@ password
 
 Se puder, ajude-nos com uma doação via PIX para manter o serviço ativo, qualquer valor é bem-vindo!
 
-Chave PIX: 58.622.735/0001-37
+Chave PIX: 
+```
+58.622.735/0001-37
+
+```
+

@@ -107,4 +107,4 @@ password
 
 Se puder, ajude-nos com uma doação via PIX para manter o serviço ativo, qualquer valor é bem-vindo!
 
-Chave PIX: c2a36640-d3da-4fe6-9666-548333397453
+Chave PIX: 58.622.735/0001-37

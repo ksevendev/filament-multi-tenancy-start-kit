@@ -47,9 +47,12 @@ Este kit foi projetado para acelerar o desenvolvimento de projetos multi tenancy
 ## Instalação
 
 #### Download
+
 ```link
-https://github.com/ksevendev/FilamentPHP-Saas-Start-Kit/archive/refs/tags/Start.zip
+https://github.com/ksevendev/filament-multi-tenancy-start-kit/archive/refs/tags/Start.zip
 ```
+ou 
+[clique aqui](https://github.com/ksevendev/filament-multi-tenancy-start-kit/archive/refs/tags/Start.zip)
 
 #### Composer
 

@@ -46,6 +46,11 @@ Este kit foi projetado para acelerar o desenvolvimento de projetos multi tenancy
 
 ## Instalação
 
+#### Download
+```link
+https://github.com/ksevendev/FilamentPHP-Saas-Start-Kit/archive/refs/tags/Start.zip
+```
+
 #### Composer
 
 ```bash
@@ -100,16 +105,5 @@ felipe@example.com
 
 ```bash
 password
-```
-
-
-## contribua com esse projeto com qualquer valor
-
-Se puder, ajude-nos com uma doação via PIX para manter o serviço ativo, qualquer valor é bem-vindo!
-
-Chave PIX: 
-```
-58.622.735/0001-37
-
 ```
 
